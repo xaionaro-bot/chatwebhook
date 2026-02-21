@@ -3,6 +3,7 @@ package chatwebhook
 import (
 	"bytes"
 	"context"
+	"crypto/sha512"
 	"io"
 	"net/http"
 
@@ -88,12 +89,13 @@ func (h *Handler) GetPublishFunc(
 			return
 		}
 
+		apiKeyHash := sha512.Sum512([]byte(apiKey))
 		for _, event := range events {
 			subKey := subKey{
 				PlatformID: platformID,
 				APIKey:     apiKey,
 			}
-			logger.Debugf(ctx, "publishing event %+v to subscribers of %s", event, platformID.String())
+			logger.Debugf(ctx, "publishing event %+v to subscribers of %s (apiKeyHashPrefix: %X)", event, platformID.String(), apiKeyHash[:2])
 			eventbus.SendEventWithCustomTopic(ctx, h.EventBus, subKey, event)
 		}
 		w.WriteHeader(http.StatusOK)
