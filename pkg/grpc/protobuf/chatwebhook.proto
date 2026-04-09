@@ -34,6 +34,7 @@ enum PlatformEventType {
     platformEventTypeChannelShoutoutReceive = 769;
     platformEventTypeBan = 1024;
     platformEventTypeAutoModHold = 1025;
+    platformEventTypeChannelPointRedemption = 1280;
     platformEventTypeOther = 65535;
 }
 
